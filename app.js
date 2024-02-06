@@ -23,7 +23,10 @@ app.get('/', (req, res) =>{                    //función get de http
     )
 })
 
-app.get('/test', (req, res) =>{                    //función get de http 
+app.post('/test', (req, res) =>{                    //función get de http 
+    console.log(req.params.nombre)                           //Imprime lo que recibe del post
+    console.log(req.body.nombre)
+    console.log(req.query.web)
     res.status(200).send({                         //hace res (envia la respuesta) con un mensaje
         message: "API node.JS en ruta Test"
     })
