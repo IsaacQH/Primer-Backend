@@ -12,7 +12,7 @@ var project_routes = require('./routes/projects.routes')
 
 //MIDDLEWARES: Son capas que se ejecutan antes de ejecutar el resultado de la peticion
 
-app.use(bodyParse.urlencoded({extended:false}))      //Configuracion NECESARIA para funcionalidad para bodyParse
+app.use(bodyParse.urlencoded({extended:true}))      //Configuracion NECESARIA para funcionalidad para bodyParse
 app.use(bodyParse.json())                            //Convierte todo lo que llega a un objeto JSON en express
 
 //CORS

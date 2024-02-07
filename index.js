@@ -17,9 +17,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/Portafolio')  //Conecta a la db 127.
             app.listen(port,() =>{
                 console.log("Servidor corriendo correctamente en la url localhost:3700")
             })
-
-
-
         })
         .catch((err) => {                                //Promesa que captura el error
             console.log(err)
