@@ -16,6 +16,14 @@ app.use(bodyParse.urlencoded({extended:true}))      //Configuracion NECESARIA pa
 app.use(bodyParse.json())                            //Convierte todo lo que llega a un objeto JSON en express
 
 //CORS
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
+
 
 //ROUTES OVERIDE
 app.use('/', project_routes)      //Podemos colocar el nombre de ruta y se sumará a la otra ruta   /api/home o /home

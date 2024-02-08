@@ -1,6 +1,7 @@
 'use strict'
 
 var Project = require('../models/projects')       //Tenemos que importar el modelo para crear métodos con el modelo
+var fs = require('fs')                            //Libreria filesystem de nodeJS (sirve para borrar)
 
 var controller = {                         //Creamos el controlador
 
@@ -101,22 +102,31 @@ var controller = {                         //Creamos el controlador
 
     uploadImage: function (req, res){
         var projectId = req.params.id                 //Obtiene el id de la página
-        var fileName = 'Imagen no subida...'         //Mensaje de imagen no subida
+        var fileName = 'Imagen no subida...'          //Mensaje de imagen no subida
 
         if(req.files){
-            var filePath = req.files.image.path     //Esta es la ruta del archivo
-            var fileSplit = filePath.split("\\")        //Divide el archivo en el esapciador para solamente sacar el nombre
-            var fileName = fileSplit[1]                 //Tomamos el nombre de la imagen para subirla a la db
+            var filePath = req.files.image.path       //Esta es la ruta del archivo
+            var fileSplit = filePath.split("\\")      //Divide el nombre path por \\  para solamente sacar el nombre del archivo
+            var fileName = fileSplit[1]               //Tomamos el nombre de la imagen para subirla a la db
 
-            Project.findByIdAndUpdate(projectId, {image: fileName}, {new: true})     //Hace el update a la db para subir la imagen
-                    .then((projectUpdated) => {
-                        if(!projectUpdated) return res.status(404).send({mesagge: "No hay upload"})   //Revisa que exista
-                        return res.status(200).send({img: fileName, project: projectUpdated})     //Muestra en JSON el nombre del archivo
-                    })
-                    .catch(() => {
-                        return res.status(404).send({ mesagge: 'Error'})                  //Captura el error
-                    })
+            //Obtener extension del archivo
+            var extSplit = fileName.split('\.')       //Divide del file name desde el punto y tener la extensión
+            var fileExt = extSplit[1]                 //tomar solo la extensión
 
+            if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){   //Compara que sean exentiones válidas
+                Project.findByIdAndUpdate(projectId, {image: fileName}, {new: true})     //Hace el update a la db para subir la imagen
+                .then((projectUpdated) => {
+                    if(!projectUpdated) return res.status(404).send({mesagge: "No hay upload"})   //Revisa que exista
+                    return res.status(200).send({img: fileName, project: projectUpdated})     //Muestra en JSON el nombre del archivo
+                })
+                .catch(() => {
+                    return res.status(404).send({ mesagge: 'Error'})                  //Captura el error
+                })
+            } else {
+                fs.unlink(filePath, (err) =>{                                         //Elimina el archivo y no lo sube
+                    return res.status(200).send({message: "La extensión no es válida"})
+                })
+            }
            
         } else {
             return res.status(200).send({ message: fileName})
