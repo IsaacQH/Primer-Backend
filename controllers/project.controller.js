@@ -97,6 +97,30 @@ var controller = {                         //Creamos el controlador
                 .catch((err) => {
                     return res.status(500).send({message: "Error al borrar", err})    //Error al actualizar
                 })
+    },
+
+    uploadImage: function (req, res){
+        var projectId = req.params.id                 //Obtiene el id de la página
+        var fileName = 'Imagen no subida...'         //Mensaje de imagen no subida
+
+        if(req.files){
+            var filePath = req.files.image.path     //Esta es la ruta del archivo
+            var fileSplit = filePath.split("\\")        //Divide el archivo en el esapciador para solamente sacar el nombre
+            var fileName = fileSplit[1]                 //Tomamos el nombre de la imagen para subirla a la db
+
+            Project.findByIdAndUpdate(projectId, {image: fileName}, {new: true})     //Hace el update a la db para subir la imagen
+                    .then((projectUpdated) => {
+                        if(!projectUpdated) return res.status(404).send({mesagge: "No hay upload"})   //Revisa que exista
+                        return res.status(200).send({img: fileName, project: projectUpdated})     //Muestra en JSON el nombre del archivo
+                    })
+                    .catch(() => {
+                        return res.status(404).send({ mesagge: 'Error'})                  //Captura el error
+                    })
+
+           
+        } else {
+            return res.status(200).send({ message: fileName})
+        }
     }
 
 }
