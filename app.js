@@ -7,6 +7,7 @@ var bodyParse = require('body-parser')  //Carga libreria body parse (para hacer 
 
 var app = express()
 
+
 //ARCHIVOS DE RUTAS
 var project_routes = require('./routes/projects.routes')
 
@@ -16,7 +17,7 @@ app.use(bodyParse.urlencoded({extended:true}))      //Configuracion NECESARIA pa
 app.use(bodyParse.json())                            //Convierte todo lo que llega a un objeto JSON en express
 
 //CORS
-app.use((req, res, next) => {
+app.use((req, res, next) => {      //Nos permite hacer los metodos http por medio de los browsers
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
