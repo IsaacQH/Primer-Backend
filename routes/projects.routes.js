@@ -4,6 +4,7 @@
 
 var express = require('express')                                     //Inicia express
 var ProjectController = require('../controllers/project.controller')    //IMPORTA objeto de controlador Projects
+var CommentController = require('../controllers/comment.controller')    //Importa el objeto de controlador comment
 
 var router = express.Router()                 //Manda a llamar a los métodos HTTP de express
 
@@ -19,7 +20,10 @@ router.get('/getAll', ProjectController.getAll)    //Se hace un metodo pogetst y
 router.put('/updateProject/:id', ProjectController.updateProject)    //Se hace un metodo put y se realiza el update
 router.delete('/deleteProject/:id', ProjectController.deleteProject)    //Se hace un metodo put y se realiza el update
 router.post('/uploadImage/:id', multipartMiddleware, ProjectController.uploadImage)    //Se hace un metodo put y se realiza el update
-                               //Esto solo sube a la carpeta lo que se envie
+                     //Esto solo sube a la carpeta lo que se envie
+router.get('/getImage/:img', ProjectController.getImage)        //Ruta para obener imagen
+
+router.post('/saveComment', CommentController.saveComment)
 
                                
 module.exports = router                      //Se exporta

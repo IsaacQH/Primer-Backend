@@ -2,6 +2,7 @@
 
 var Project = require('../models/projects')       //Tenemos que importar el modelo para crear métodos con el modelo
 var fs = require('fs')                            //Libreria filesystem de nodeJS (sirve para borrar)
+var path = require('path')           //Nos permite cargar rutas físicas
 
 var controller = {                         //Creamos el controlador
 
@@ -131,6 +132,19 @@ var controller = {                         //Creamos el controlador
         } else {
             return res.status(200).send({ message: fileName})
         }
+    },
+
+    getImage: function(req, res){
+        var file = req.params.img     //Se pasa el archivo imagen por url y se obtiene
+        var path_file = './uploads/' + file     //El path con el archivo file seleccionado
+
+        fs.exists(path_file, (exists) => {     //Revisa que exista en el filesystem el path introducido
+                    if(exists){
+                        return res.sendFile(path.resolve(path_file))   //regresa la imagen si existe
+                    }else {
+                        return res.status(200).send({message: 'There is no image'})
+                    }
+            })
     }
 
 }
